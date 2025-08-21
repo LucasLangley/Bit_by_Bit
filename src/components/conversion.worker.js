@@ -1,4 +1,3 @@
-// src/components/ImageConverter/conversion.worker.js
 
 // --- PALETAS DE CORES (ATUALIZADO) ---
 const PALETTES = {
@@ -70,7 +69,7 @@ self.onmessage = (event) => {
     } else if (PALETTES[palette]) {
       currentPalette = PALETTES[palette];
     } else {
-      currentPalette = null; // fallback: cores reduzidas
+      currentPalette = null;
     }
 
     const data = new Uint8ClampedArray(imageData.data);
@@ -95,7 +94,6 @@ self.onmessage = (event) => {
             newPixel = findClosestColor(oldPixel, currentPalette, colorMetric);
           }
         } else {
-          // fallback "cores reduzidas"
           const factor = 48;
           newPixel = [
             Math.round(oldPixel[0] / factor) * factor,

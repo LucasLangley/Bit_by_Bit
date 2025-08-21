@@ -17,12 +17,10 @@ const PRESETS = {
 };
 
 const ImageConverter = () => {
-  // Estado principal das configurações
   const [settings, setSettings] = useState({
     pixelResolution: 128, palette: 'nes', ditheringType: 'floyd', colorMetric: 'cielab',
     scanlines: true, contrast: 100, saturation: 100,
   });
-  // Estados separados para UI e dados
   const [originalImage, setOriginalImage] = useState(null);
   const [convertedImage, setConvertedImage] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
@@ -50,9 +48,6 @@ const ImageConverter = () => {
   // Efeito para inicializar o worker
   useEffect(() => {
     workerRef.current = new Worker(new URL('./conversion.worker.js', import.meta.url), { type: 'module' });
-
-    // ######### CORREÇÃO CRÍTICA ESTÁ AQUI #########
-    // A lógica para receber a mensagem do worker foi restaurada.
     workerRef.current.onmessage = (event) => {
       const { status, imageData, message } = event.data;
       if (status === 'success') {
@@ -77,13 +72,13 @@ const ImageConverter = () => {
         console.error("Erro retornado pelo Web Worker:", message);
         alert("Ocorreu um erro durante a conversão.");
       }
-      setIsConverting(false); // <-- A linha que faltava para parar o "Convertendo..."
+      setIsConverting(false);
     };
 
     workerRef.current.onerror = (error) => {
       console.error("Erro fatal no Worker:", error);
       alert("Não foi possível iniciar o processo de conversão.");
-      setIsConverting(false); // <-- E aqui também
+      setIsConverting(false);
     };
 
     return () => workerRef.current.terminate();
@@ -92,7 +87,6 @@ const ImageConverter = () => {
   const debouncedSettings = useDebounce(settings, 250);
   const debouncedCustomPalette = useDebounce(customPalette, 250);
 
-  // Efeito principal que dispara a conversão
   useEffect(() => {
     if (!originalImage || !workerRef.current) return;
     setIsConverting(true);
@@ -198,7 +192,6 @@ const ImageConverter = () => {
     }
   }, []);
   
-// Em src/components/ImageConverter/index.jsx
 
 return (
     <div className={styles.appContainer}>
@@ -309,7 +302,6 @@ return (
       </aside>
   
       <main className={styles.mainContent}>
-        {/* Se não houver imagem, mostra apenas a zona de upload */}
         {!originalImage && (
           <div
             className={`${styles.dropZone} ${isDragging ? styles.dragging : ''}`}
@@ -330,7 +322,6 @@ return (
           </div>
         )}
   
-        {/* Se houver imagem, mostra comparação lado a lado */}
         {originalImage && (
           <div className={styles.comparisonContainer}>
             <div className={styles.imageBox}>
