@@ -1,0 +1,188 @@
+/* Layout Principal */
+.appContainer {
+    display: flex;
+    min-height: 100vh;
+    background-color: #1a1b26;
+    color: #c0caf5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  .sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background-color: #1f2335;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    overflow-y: auto;
+  }
+  
+  .mainContent {
+    flex-grow: 1;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Controles da Sidebar */
+  .sidebarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #414868;
+    padding-bottom: 1rem;
+  }
+  .sidebarHeader h2 { margin: 0; color: #a9b1d6; }
+  .clearButton {
+    background: #f7768e; color: #1a1b26; border: none;
+    padding: 6px 12px; border-radius: 4px; cursor: pointer;
+    font-weight: bold; transition: filter 0.2s;
+  }
+  .clearButton:hover { filter: brightness(0.9); }
+  .presetGroup, .controlGroup { display: flex; flex-direction: column; gap: 0.75rem; }
+  .presetGroup h3 { margin: 0; font-size: 1rem; color: #e0af68; }
+  .presetButtons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .presetButtons button {
+    background-color: #24283b; color: #a9b1d6; border: 1px solid #414868;
+    padding: 8px; border-radius: 4px; cursor: pointer; transition: background-color 0.2s;
+  }
+  .presetButtons button:hover { background-color: #414868; }
+  .controlGroup label { font-size: 0.9rem; font-weight: 500; color: #7aa2f7; }
+  /* ... (outros estilos de controles da sidebar) ... */
+  
+  /* Estilos da Área de Comparação */
+  .comparisonContainer {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1400px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  .imageBox {
+    flex: 1;
+    background-color: #16161e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #414868;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+  }
+  
+  .imageBox h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #a9b1d6;
+    font-weight: 500;
+  }
+  
+  .imageBox img {
+    max-width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+    border-radius: 6px;
+    image-rendering: pixelated;
+  }
+  
+  /* Zona de Upload (quando não há imagem) */
+  .dropZone {
+    width: 100%;
+    max-width: 600px;
+    min-height: 300px;
+    border: 3px dashed #414868;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .dropZone.dragging { background-color: #2a2f44; border-color: #7dcfff; }
+  .uploadButton {
+    padding: 12px 24px; border-radius: 6px; background-color: #bb9af7;
+    color: #1a1b26; font-weight: bold; cursor: pointer; border: none;
+    transition: background-color 0.2s ease;
+  }
+  .uploadButton:hover { background-color: #9d7cd8; }
+  
+  /* Botões de Ação (Download, Copiar) */
+  .outputActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    width: 100%;
+  }
+  
+  .actionButton {
+    flex-grow: 1;
+    max-width: 220px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 20px;
+    border-radius: 6px;
+    background-color: #414868;
+    color: #c0caf5;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .actionButton:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+  .actionButton.primary {
+    background-color: #9ece6a;
+    color: #1a1b26;
+  }
+  .actionButton .icon {
+    font-size: 1.1rem;
+  }
+  
+  /* Efeito Scanlines */
+  .scanlines {
+    position: relative;
+    display: block;
+    line-height: 0;
+  }
+  .scanlines::after {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; pointer-events: none;
+    background: repeating-linear-gradient(to bottom,
+      rgba(16, 18, 27, 0.3) 0px, rgba(16, 18, 27, 0.3) 1px,
+      transparent 1px, transparent 3px);
+  }
+  
+  /* Indicadores de Estado */
+  .loading, .placeholder {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: #565f89;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 1200px) {
+    .appContainer { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .mainContent { padding: 1rem; }
+    .comparisonContainer { flex-direction: column; align-items: center; }
+  }
+  
+  /* Você pode colar o resto dos seus estilos da sidebar aqui (inputs, selects, etc) se eles não estiverem na lista acima */
+  .controlGroup input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:8px;background:#414868;border-radius:5px;outline:none}.controlGroup input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;background:#7dcfff;cursor:pointer;border-radius:50%}.controlGroup select{width:100%;padding:10px;background-color:#24283b;color:#c0caf5;border:1px solid #414868;border-radius:4px;font-size:.9rem}.toggleLabel{display:flex;justify-content:space-between;align-items:center}.customPaletteEditor{background-color:#24283b;border-radius:4px;padding:10px;border:1px solid #414868}.colorInput{display:flex;gap:5px;margin-bottom:10px}.colorInput input[type=color]{width:40px;height:30px;padding:0;border:none;background:0 0}.colorInput input[type=text]{flex-grow:1;background-color:#1a1b26;color:#c0caf5;border:1px solid #414868;padding:0 5px}.colorInput button{width:30px;background-color:#9ece6a;color:#1a1b26;border:none;font-size:1.2rem;font-weight:700;cursor:pointer}.paletteColors{display:flex;flex-wrap:wrap;gap:5px}.colorSwatch{width:20px;height:20px;border-radius:3px;border:1px solid #c0caf5;cursor:pointer;position:relative}.colorSwatch:hover::after{content:'x';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;text-shadow:0 0 2px #000;font-weight:700}
