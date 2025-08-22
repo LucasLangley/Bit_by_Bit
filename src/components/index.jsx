@@ -298,6 +298,16 @@ return (
               onChange={e => setSettings(s=>({...s, scanlines: e.target.checked}))}
             />
           </label>
+          <div className={styles.outputActions}>
+                    <button onClick={handleCopyToClipboard} className={styles.actionButton}>
+                      <span className={styles.icon}>📋</span> Copiar
+                    </button>
+                    <a href={convertedImage} download="resultado-8bit.png"
+                      className={`${styles.actionButton} ${styles.primary}`}
+                    >
+                      <span className={styles.icon}>⬇️</span> Download
+                    </a>
+                  </div>
         </div>
       </aside>
   
@@ -339,16 +349,6 @@ return (
                 <>
                   <div className={settings.scanlines ? styles.scanlines : ''}>
                     <img src={convertedImage} alt="Convertida" />
-                  </div>
-                  <div className={styles.outputActions}>
-                    <button onClick={handleCopyToClipboard} className={styles.actionButton}>
-                      <span className={styles.icon}>📋</span> Copiar
-                    </button>
-                    <a href={convertedImage} download="resultado-8bit.png"
-                      className={`${styles.actionButton} ${styles.primary}`}
-                    >
-                      <span className={styles.icon}>⬇️</span> Download
-                    </a>
                   </div>
                 </>
               )}

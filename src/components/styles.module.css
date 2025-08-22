@@ -116,7 +116,7 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
     width: 100%;
   }
   
@@ -125,7 +125,6 @@
     max-width: 220px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
     padding: 12px 20px;
     border-radius: 6px;
