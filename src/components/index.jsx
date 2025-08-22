@@ -198,7 +198,7 @@ return (
       <aside className={styles.sidebar}>
         {/* === SIDEBAR DE CONTROLES === */}
         <div className={styles.sidebarHeader}>
-          <h2>Controles</h2>
+          <h2>Bit👾by👾Bit</h2>
           <button onClick={handleClear} className={styles.clearButton} title="Limpar imagem e recomeçar">Limpar</button>
         </div>
         <div className={styles.presetGroup}>
