@@ -23,7 +23,7 @@ Um conversor moderno e interativo que transforma suas imagens em arte pixel aut�
 ### Carregamento de Imagem
 1. **Arrastar e Soltar**: Simplesmente arraste uma imagem para a área indicada
 2. **Seleção Manual**: Clique em "Escolher Arquivo" para navegar pelos seus arquivos
-3. **Formatos Suportados**: JPG, PNG, GIF, WebP e outros formatos de imagem
+3. **Formatos Suportados**: JPG, JPEG, PNG, WebP e outros formatos de imagem
 
 ### Conversão
 1. Selecione um dos **estilos prontos** ou ajuste manualmente
