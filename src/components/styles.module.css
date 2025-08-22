@@ -1,4 +1,3 @@
-/* Mobile First - Estilos base para dispositivos menores */
 .appContainer {
   display: flex;
   flex-direction: column-reverse;
@@ -347,7 +346,6 @@
   font-size: 0.7rem;
 }
 
-/* Tablet - 768px+ */
 @media (min-width: 768px) {
   .appContainer {
     flex-direction: row;
@@ -472,12 +470,11 @@
   }
 }
 
-/* Desktop - 1024px+ */
 @media (min-width: 1024px) {
   .sidebar {
     width: 320px;
     padding: 1.5rem 2rem;
-    gap: 1.25rem;
+    gap: 1rem;
     box-shadow: 5px 0 15px rgba(0,0,0,0.3);
   }
   
@@ -577,7 +574,6 @@
   }
 }
 
-/* Large Desktop - 1280px+ */
 @media (min-width: 1280px) {
   .comparisonContainer {
     max-width: 900px;
