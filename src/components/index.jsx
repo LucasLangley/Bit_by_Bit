@@ -14,6 +14,10 @@ const PRESETS = {
   nes: { pixelResolution: 128, palette: 'nes', ditheringType: 'none', colorMetric: 'cielab', scanlines: true, contrast: 110, saturation: 120 },
   c64: { pixelResolution: 160, palette: 'c64', ditheringType: 'floyd', colorMetric: 'rgb', scanlines: true, contrast: 100, saturation: 100 },
   clean: { pixelResolution: 256, palette: 'pico8', ditheringType: 'none', colorMetric: 'cielab', scanlines: false, contrast: 100, saturation: 100 },
+  lofi: { pixelResolution: 256, palette: 'lofi', ditheringType: 'none', colorMetric: 'cielab', scanlines: false, contrast: 95, saturation: 85 },
+  cyberpunk: { pixelResolution: 256, palette: 'custom', ditheringType: 'none', colorMetric: 'cielab', scanlines: true, contrast: 125, saturation: 140 },
+  darkFantasy: { pixelResolution: 240, palette: 'darkFantasy', ditheringType: 'floyd', colorMetric: 'cielab', scanlines: false, contrast: 130, saturation: 100 },
+  rpg: { pixelResolution: 160, palette: 'rpgClassic', ditheringType: 'none', colorMetric: 'rgb', scanlines: false, contrast: 110, saturation: 100 }
 };
 
 const ImageConverter = () => {
@@ -25,7 +29,7 @@ const ImageConverter = () => {
   const [convertedImage, setConvertedImage] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [customPalette, setCustomPalette] = useState(['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF']);
+  const [customPalette, setCustomPalette] = useState(['#2e2a36','#4e455b','#736a89','#948aa9','#c0b9d0','#ffffff','#ff0044','#ff7722','#ffcc00','#aaff00','#55ff00','#00ff99','#00aaff','#0055ff','#5500ff','#aa00ff']);
   const [newColor, setNewColor] = useState('#000000');
 
   const canvasRef = useRef(null);
@@ -96,15 +100,18 @@ const ImageConverter = () => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       
-      ctx.filter = `contrast(${debouncedSettings.contrast}%) saturate(${debouncedSettings.saturation}%)`;
-      
       const smallWidth = debouncedSettings.pixelResolution;
       const smallHeight = Math.round(smallWidth * (img.height / img.width));
       canvas.dataset.finalWidth = img.width;
       canvas.dataset.finalHeight = img.height;
+      
       canvas.width = smallWidth;
       canvas.height = smallHeight;
+      
+      ctx.filter = `contrast(${debouncedSettings.contrast}%) saturate(${debouncedSettings.saturation}%)`;
+      
       ctx.drawImage(img, 0, 0, smallWidth, smallHeight);
+      
       const imageData = ctx.getImageData(0, 0, smallWidth, smallHeight);
       
       workerRef.current.postMessage({
@@ -192,11 +199,9 @@ const ImageConverter = () => {
     }
   }, []);
   
-
-return (
+  return (
     <div className={styles.appContainer}>
       <aside className={styles.sidebar}>
-        {/* === SIDEBAR DE CONTROLES === */}
         <div className={styles.sidebarHeader}>
           <h2>Bit👾by👾Bit</h2>
           <button onClick={handleClear} className={styles.clearButton} title="Limpar imagem e recomeçar">Limpar</button>
@@ -208,28 +213,23 @@ return (
             <button onClick={() => setSettings(s => ({...s, ...PRESETS.nes}))}>NES</button>
             <button onClick={() => setSettings(s => ({...s, ...PRESETS.c64}))}>C64</button>
             <button onClick={() => setSettings(s => ({...s, ...PRESETS.clean}))}>Pixel Limpo</button>
+            <button onClick={() => setSettings(s => ({...s, ...PRESETS.lofi}))}>Lo-fi</button>
+            <button onClick={() => setSettings(s => ({...s, ...PRESETS.cyberpunk}))}>Cyberpunk</button>
+            <button onClick={() => setSettings(s => ({...s, ...PRESETS.darkFantasy}))}>Fantasia</button>
+            <button onClick={() => setSettings(s => ({...s, ...PRESETS.rpg}))}>RPG</button>
           </div>
         </div>
         <div className={styles.controlGroup}>
           <label>Resolução Pixel (Largura): {settings.pixelResolution}px</label>
-          <input type="range" min="32" max="256" step="8"
-            value={settings.pixelResolution}
-            onChange={e => setSettings(s=>({...s, pixelResolution: parseInt(e.target.value)}))}
-          />
+          <input type="range" min="32" max="256" step="8" value={settings.pixelResolution} onChange={e => setSettings(s=>({...s, pixelResolution: parseInt(e.target.value)}))} />
         </div>
         <div className={styles.controlGroup}>
           <label>Contraste: {settings.contrast}%</label>
-          <input type="range" min="50" max="200"
-            value={settings.contrast}
-            onChange={e => setSettings(s=>({...s, contrast: parseInt(e.target.value)}))}
-          />
+          <input type="range" min="50" max="200" value={settings.contrast} onChange={e => setSettings(s=>({...s, contrast: parseInt(e.target.value)}))} />
         </div>
         <div className={styles.controlGroup}>
           <label>Saturação: {settings.saturation}%</label>
-          <input type="range" min="0" max="200"
-            value={settings.saturation}
-            onChange={e => setSettings(s=>({...s, saturation: parseInt(e.target.value)}))}
-          />
+          <input type="range" min="0" max="200" value={settings.saturation} onChange={e => setSettings(s=>({...s, saturation: parseInt(e.target.value)}))} />
         </div>
         <div className={styles.controlGroup}>
           <label>Paleta de Cores</label>
@@ -253,98 +253,59 @@ return (
             </div>
             <div className={styles.paletteColors}>
               {customPalette.map(color => (
-                <div key={color}
-                  className={styles.colorSwatch}
-                  style={{backgroundColor: color}}
-                  onClick={() => handleRemoveColor(color)}
-                  title={`Remover ${color}`}
-                />
+                <div key={color} className={styles.colorSwatch} style={{backgroundColor: color}} onClick={() => handleRemoveColor(color)} title={`Remover ${color}`} />
               ))}
             </div>
           </div>
         )}
         <div className={styles.controlGroup}>
-          <label title="Floyd-Steinberg cria gradientes suaves. Bayer cria padrões repetitivos.">
-            Algoritmo de Dithering (?)
-          </label>
-          <select
-            value={settings.ditheringType}
-            onChange={e => setSettings(s=>({...s, ditheringType: e.target.value}))}
-            disabled={settings.palette === 'fullColor' || settings.palette === 'custom'}
-          >
+          <label title="Floyd-Steinberg cria gradientes suaves. Bayer cria padrões repetitivos.">Algoritmo de Dithering (?)</label>
+          <select value={settings.ditheringType} onChange={e => setSettings(s=>({...s, ditheringType: e.target.value}))} disabled={settings.palette === 'fullColor' || settings.palette === 'custom'}>
             <option value="floyd">Floyd-Steinberg</option>
             <option value="ordered">Bayer (Estruturado)</option>
             <option value="none">Nenhum</option>
           </select>
         </div>
         <div className={styles.controlGroup}>
-          <label title="CIELAB é mais preciso para a percepção humana, RGB é mais rápido.">
-            Métrica de Cor (?)
-          </label>
-          <select
-            value={settings.colorMetric}
-            onChange={e => setSettings(s=>({...s, colorMetric: e.target.value}))}
-            disabled={settings.palette === 'fullColor'}
-          >
+          <label title="CIELAB é mais preciso para a percepção humana, RGB é mais rápido.">Métrica de Cor (?)</label>
+          <select value={settings.colorMetric} onChange={e => setSettings(s=>({...s, colorMetric: e.target.value}))} disabled={settings.palette === 'fullColor'}>
             <option value="cielab">CIELAB</option>
             <option value="rgb">RGB</option>
           </select>
         </div>
         <div className={styles.controlGroup}>
-          <label className={styles.toggleLabel}>
-            Efeito Scanlines
-            <input type="checkbox"
-              checked={settings.scanlines}
-              onChange={e => setSettings(s=>({...s, scanlines: e.target.checked}))}
-            />
+          <label className={styles.toggleLabel}>Efeito Scanlines
+            <input type="checkbox" checked={settings.scanlines} onChange={e => setSettings(s=>({...s, scanlines: e.target.checked}))} />
           </label>
-          <div className={styles.outputActions}>
-                    <button onClick={handleCopyToClipboard} className={styles.actionButton}>
-                      <span className={styles.icon}>📋</span> Copiar
-                    </button>
-                    <a href={convertedImage} download="resultado-8bit.png"
-                      className={`${styles.actionButton} ${styles.primary}`}
-                    >
-                      <span className={styles.icon}>⬇️</span> Download
-                    </a>
-                  </div>
+        </div>
+        <div className={styles.outputActions}>
+          <button onClick={handleCopyToClipboard} className={styles.actionButton}>
+            <span className={styles.icon}>📋</span> Copiar
+          </button>
+          <a href={convertedImage} download="resultado-8bit.png" className={`${styles.actionButton} ${styles.primary}`}>
+            <span className={styles.icon}>⬇️</span> Download
+          </a>
         </div>
       </aside>
-  
       <main className={styles.mainContent}>
         {!originalImage && (
-          <div
-            className={`${styles.dropZone} ${isDragging ? styles.dragging : ''}`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
+          <div className={`${styles.dropZone} ${isDragging ? styles.dragging : ''}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
             <p>Arraste e solte uma imagem aqui</p>
             <p>ou</p>
-            <label htmlFor="file-upload" className={styles.uploadButton}>
-              Escolher Arquivo
-            </label>
-            <input id="file-upload" type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              style={{display: 'none'}}
-            />
+            <label htmlFor="file-upload" className={styles.uploadButton}>Escolher Arquivo</label>
+            <input id="file-upload" type="file" onChange={handleFileChange} accept="image/*" style={{display: 'none'}} />
           </div>
         )}
-  
         {originalImage && (
           <div className={styles.comparisonContainer}>
             <div className={styles.imageBox}>
               <h2>Original</h2>
               <img src={originalImage} alt="Original" />
             </div>
-  
             <div className={styles.imageBox}>
               <h2>Resultado</h2>
               {isConverting && <div className={styles.loading}>Convertendo...</div>}
-              {!isConverting && !convertedImage && (
-                <div className={styles.placeholder}>Ajuste os controles</div>
-              )}
+              {!isConverting && !convertedImage && (<div className={styles.placeholder}>Ajuste os controles</div>)}
               {convertedImage && (
                 <>
                   <div className={settings.scanlines ? styles.scanlines : ''}>
@@ -356,10 +317,9 @@ return (
           </div>
         )}
       </main>
-  
       <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
     </div>
   );
-}  
+} 
 
 export default ImageConverter;
